@@ -47,7 +47,7 @@ class _JogoState extends State<Jogo> {
       (escolhaUsuario == 'papel' && escolhaApp == 'pedra')
     ) {
       setState(() {
-        _mensagem = 'Usuário venceu!';
+        _mensagem = 'Você PERDEU! >:)';
       });
     } else if (
       (escolhaApp == 'pedra' && escolhaUsuario == 'tesoura') ||
@@ -55,10 +55,10 @@ class _JogoState extends State<Jogo> {
       (escolhaApp == 'papel' && escolhaUsuario == 'pedra')
     ) {
       setState(() {
-        _mensagem = 'App venceu!';
+        _mensagem = 'Você VENCEU! >:|';
       });
     } else {
-      _mensagem = 'Empate!';
+      _mensagem = 'Empatamos! ;)';
     }
   }
 
