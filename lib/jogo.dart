@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 class Jogo extends StatefulWidget {
   const Jogo({super.key});
@@ -8,6 +9,59 @@ class Jogo extends StatefulWidget {
 }
 
 class _JogoState extends State<Jogo> {
+
+  var _imagemApp = AssetImage('images/padrao.png'); // (escolha do app)
+  var _mensagem = 'Escolha uma opção abaixo:';
+
+  _opcaoSelecionada(String escolhaUsuario) {
+
+    var opcoes = ["pedra", "papel", "tesoura"];
+    var numero = Random().nextInt(3);
+    var escolhaApp = opcoes[numero];
+
+    // Exibição da imagem escolhida pelo app
+    switch( escolhaApp ) {
+      case "pedra":
+        setState(() {
+          _imagemApp = AssetImage('images/pedra.png');
+        });
+        break;
+      case "papel":
+        setState(() {
+          _imagemApp = AssetImage('images/papel.png');
+        });
+        break;
+      case "tesoura":
+        setState(() {
+          _imagemApp = AssetImage('images/tesoura.png');
+        });
+        break;
+    }
+    _validarGanhador(escolhaUsuario, escolhaApp);
+  }
+
+  _validarGanhador(String escolhaUsuario, String escolhaApp) {
+    if (
+      (escolhaUsuario == 'pedra' && escolhaApp == 'tesoura') ||
+      (escolhaUsuario == 'tesoura' && escolhaApp == 'papel') ||
+      (escolhaUsuario == 'papel' && escolhaApp == 'pedra')
+    ) {
+      setState(() {
+        _mensagem = 'Usuário venceu!';
+      });
+    } else if (
+      (escolhaApp == 'pedra' && escolhaUsuario == 'tesoura') ||
+      (escolhaApp == 'tesoura' && escolhaUsuario == 'papel') ||
+      (escolhaApp == 'papel' && escolhaUsuario == 'pedra')
+    ) {
+      setState(() {
+        _mensagem = 'App venceu!';
+      });
+    } else {
+      _mensagem = 'Empate!';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +74,7 @@ class _JogoState extends State<Jogo> {
         backgroundColor: Colors.blueAccent,
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(padding: EdgeInsets.only(top: 32, bottom: 16),
@@ -33,14 +87,10 @@ class _JogoState extends State<Jogo> {
             ),
           ),
           ),
-          GestureDetector(
-            onTap: (){ print('Imagem clicada!'); } ,
-            onDoubleTap: () { print('Dois cliques na imagem!'); } ,
-            child: Image.asset('images/padrao.png'),
-          ),
+          Image(image: _imagemApp,),
           Padding(padding: EdgeInsets.only(top: 32, bottom: 16),
             child: Text(
-              'Escolha uma opção abaixo',
+              _mensagem,
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 20,
@@ -49,10 +99,25 @@ class _JogoState extends State<Jogo> {
             ),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Image.asset('images/pedra.png'),
+              GestureDetector(
+                onTap: () => _opcaoSelecionada("pedra"),
+                child: Image.asset('images/pedra.png', height: 100),
+              ),
+              GestureDetector(
+                onTap: () => _opcaoSelecionada("papel"),
+                child: Image.asset('images/papel.png', height: 100),
+              ),
+              GestureDetector(
+                onTap: () => _opcaoSelecionada("tesoura"),
+                child: Image.asset('images/tesoura.png', height: 100),
+              ),
+              /*
+
               Image.asset('images/papel.png'),
               Image.asset('images/tesoura.png'),
+              */
             ],
           )
         ],
